@@ -1,55 +1,71 @@
 package org.example;
 
-import java.net.SocketException;
-import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpResponse;
+import org.example.utils.*;
 
 public class Exercise3 {
-
-    private void startSending()
-    {
-        HttpResponse.ResponseInfo response = new HttpResponse.ResponseInfo() {
-            @Override
-            public int statusCode() {
-                return 0;
+    public static String testableHtml(
+            PageData pageData,
+            boolean includeSuiteSetup
+    ) throws Exception {
+        WikiPage wikiPage = pageData.getWikiPage();
+        StringBuffer buffer = new StringBuffer();
+        if (pageData.hasAttribute("Test")) {
+            if (includeSuiteSetup) {
+                WikiPage suiteSetup =
+                        PageCrawlerImpl.getInheritedPage(
+                                SuiteResponder.SUITE_SETUP_NAME, wikiPage
+                        );
+                if (suiteSetup != null) {
+                    WikiPagePath pagePath =
+                            suiteSetup.getPageCrawler().getFullPath(suiteSetup);
+                    String pagePathName = PathParser.render(pagePath);
+                    buffer.append("!include -setup .")
+                            .append(pagePathName)
+                            .append("\n");
+                }
             }
-
-            @Override
-            public HttpHeaders headers() {
-                return null;
-            }
-
-            @Override
-            public HttpClient.Version version() {
-                return null;
-            }
-        };
-
-        try
-        {
-            doSending();
-        }
-        catch(SocketException e)
-        {
-            // normal. someone stopped the request.
-        }
-        catch(Exception e)
-        {
-            try
-            {
-                response.wait(100l);
-                response.notifyAll();
-            }
-            catch(Exception e1)
-            {
-                //Give me a break!
+            WikiPage setup =
+                    PageCrawlerImpl.getInheritedPage("SetUp", wikiPage);
+            if (setup != null) {
+                WikiPagePath setupPath =
+                        wikiPage.getPageCrawler().getFullPath(setup);
+                String setupPathName = PathParser.render(setupPath);
+                buffer.append("!include -setup .")
+                        .append(setupPathName)
+                        .append("\n");
             }
         }
-    }
-
-    private void doSending() throws SocketException{
-        // do nothing for now
+        buffer.append(pageData.getContent());
+        if (pageData.hasAttribute("Test")) {
+            WikiPage teardown =
+                    PageCrawlerImpl.getInheritedPage("TearDown", wikiPage);
+            if (teardown != null) {
+                WikiPagePath tearDownPath =
+                        wikiPage.getPageCrawler().getFullPath(teardown);
+                String tearDownPathName = PathParser.render(tearDownPath);
+                buffer.append("\n")
+                        .append("!include -teardown .")
+                        .append(tearDownPathName)
+                        .append("\n");
+            }
+            if (includeSuiteSetup) {
+                WikiPage suiteTeardown =
+                        PageCrawlerImpl.getInheritedPage(
+                                SuiteResponder.SUITE_TEARDOWN_NAME,
+                                wikiPage
+                        );
+                if (suiteTeardown != null) {
+                    WikiPagePath pagePath =
+                            suiteTeardown.getPageCrawler().getFullPath (suiteTeardown);
+                    String pagePathName = PathParser.render(pagePath);
+                    buffer.append("!include -teardown .")
+                            .append(pagePathName)
+                            .append("\n");
+                }
+            }
+        }
+        pageData.setContent(buffer.toString());
+        return pageData.getHtml();
     }
 
 }
