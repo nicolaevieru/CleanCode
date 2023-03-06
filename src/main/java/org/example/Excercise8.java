@@ -1,0 +1,76 @@
+package org.example;
+
+public interface Excercise8 {
+    public String getCustomizerLanguagePath();
+    public void setSystemConfigPath(String systemConfigPath);
+    public String getSystemConfigDocument();
+    public void setSystemConfigDocument(String systemConfigDocument);
+    public boolean getGuruState();
+    public boolean getNoviceState();
+    public boolean getOpenSourceState();
+    public void showObject(Object object);
+    public void showProgress(String s);
+
+    public boolean isMetadataDirty();
+    public void setIsMetadataDirty(boolean isMetadataDirty);
+    public Object getLastFocusedComponent();
+    public void setLastFocused(Object lastFocused);
+    public void setMouseSelectState(boolean isMouseSelected);
+    public boolean isMouseSelected();
+    public Object getLanguageManager();
+    public Object getProject();
+    public Object getFirstProject();
+    public Object getLastProject();
+    public String getNewProjectName();
+    public void setComponentSizes(Object dim);
+    public String getCurrentDir();
+    public void setCurrentDir(String newDir);
+    public void updateStatus(int dotPos, int markPos);
+    public Class[] getDataBaseClasses();
+    public Object getMetadataFeeder();
+    public void addProject(Object project);
+    public boolean setCurrentProject(Object project);
+    public boolean removeProject(Object project);
+    public Object getProgramMetadata();
+    public void resetDashboard();
+    public Object loadProject(String fileName, String projectName);
+    public void setCanSaveMetadata(boolean canSave);
+    public Object getSelectedObject();
+    public void deselectObjects();
+    public void setProject(Object project);
+    public void editorAction(String actionName, Object event);
+    public void setMode(int mode);
+    public Object getFileManager();
+    public void setFileManager(Object fileManager);
+    public Object getConfigManager();
+    public void setConfigManager(Object configManager);
+    public ClassLoader getClassLoader();
+    public void setClassLoader(ClassLoader classLoader);
+    public Object getProps();
+    public String getUserHome();
+    public String getBaseDir();
+    public int getMajorVersionNumber();
+    public int getMinorVersionNumber();
+    public int getBuildNumber();
+    public Object pasting(
+            Object target, Object pasted, Object project);
+    public void processMenuItems(Object metaObject);
+    public void processMenuSeparators(Object metaObject);
+    public void processTabPages(Object metaObject);
+    public void processPlacement(Object object);
+    public void processCreateLayout(Object object);
+    public void updateDisplayLayer(Object object, int layerIndex);
+    public void propertyEditedRepaint(Object object);
+    public void processDeleteObject(Object object);
+    public boolean getAttachedToDesigner();
+    public void processProjectChangedState(boolean hasProjectChanged);
+    public void processObjectNameChanged(Object object);
+    public void runProject();
+
+    public void setAçowDragging(boolean allowDragging);
+    public boolean allowDragging();
+    public boolean isCustomizing();
+    public void setTitle(String title);
+    public Object getIdeMenuBar();
+    public void showHelper(Object metaObject, String propertyName);
+}
